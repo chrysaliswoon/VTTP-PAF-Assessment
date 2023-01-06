@@ -3,6 +3,7 @@ package vttp2022.paf.assessment.eshop.controllers;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ import vttp2022.paf.assessment.eshop.respositories.OrderRepository;
 import vttp2022.paf.assessment.eshop.services.WarehouseService;
 
 @Controller
-@RequestMapping(path = "/api/order", consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/order", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController {
 	// TODO: Task 3
 
@@ -54,7 +55,20 @@ public class OrderController {
 			String message = "Customer " + name + " not found";
 			return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
 		} else {
-			// warehouseSvc.dispatch(name);
+			Order o = new Order();
+
+			// ? Generate orderId
+			String orderId = UUID.randomUUID().toString().substring(0, 8);
+
+			// ? Set the orderId
+			o.setOrderId(orderId);
+
+			// ? Insert purchase order into database
+			orderRepo.insertPurchaseOrder(o);
+
+			//? Dispatch order to warehouse
+			warehouseSvc.dispatch(o);
+
 			return null;
 		}
 
