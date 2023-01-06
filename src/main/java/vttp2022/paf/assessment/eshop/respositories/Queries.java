@@ -9,5 +9,8 @@ public class Queries {
     //? Create a new purchase order
     public static String SQL_INSERT_PURCHASE_ORDER = "INSERT INTO orders(order_id, delivery_id, customer_name, ship_address, email, created_date) VALUES (?, ?, ?, ?, ?, ?)";
     public static String SQL_INSERT_LINE_ITEM = "INSERT INTO orderDetails (orderDetails_id, item, quantity, order_id) VALUES (?, ?, ?, ?)";
+
+    //? Find orders by name
+    final static String SQL_FIND_BY_NAME = "SELECT order_id, customer_name, status FROM eshop.status WHERE customer_name = ?";
     
 }

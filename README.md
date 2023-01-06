@@ -150,7 +150,7 @@ The ```order_status``` is for recording the dispatched status. An order status r
   }
   ```
 
-## API Requests
+## API Requests - Task 6 (12 marks)
 The e-store front makes the following HTTP request to get the total number of dispatched and pending orders for a customer.
 
 ```
@@ -158,7 +158,7 @@ GET /api/order/<name>/status
 Accept: application/json
 ```
 
-- [] Create a RESTController called orderRESTController
+- [X] Create a RESTController called orderRESTController
 - [] Write a request handler to process the request and return the required data in the following JSON document structure:
 ```json
 {
@@ -168,7 +168,7 @@ Accept: application/json
 }
 ```
 
-- [] Use a **join statement** to get this result from your estore database
+- [X] Use a **join statement** to get this result from your estore database
 
 ## Submission & Deployment - Task 7 (5 marks)
 

@@ -4,6 +4,11 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+
+import jakarta.json.Json;
+import jakarta.json.JsonValue;
+
 // DO NOT CHANGE THIS CLASS
 public class Order {
 
@@ -97,4 +102,21 @@ public class Order {
 	public void addLineItem(LineItem lineItem) {
 		this.lineItems.add(lineItem);
 	}
+
+    public JsonValue toJson() {
+        return Json.createObjectBuilder()
+		.add("name", getName())
+		// .add("dispatched", get)
+		.add("pending", getStatus())
+
+		.build();
+    }
+
+    public static Order create(SqlRowSet rs) {
+		Order o = new Order();
+		o.setOrderId("order_id");
+		o.setStatus(rs.getString("status"));
+
+        return o;
+    }
 }

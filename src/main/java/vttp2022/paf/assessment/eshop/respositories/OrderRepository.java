@@ -2,10 +2,13 @@ package vttp2022.paf.assessment.eshop.respositories;
 
 import static vttp2022.paf.assessment.eshop.respositories.Queries.*;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
 import vttp2022.paf.assessment.eshop.models.LineItem;
@@ -39,6 +42,19 @@ public class OrderRepository {
 			//? Batch update
 			jdbcTemplate.batchUpdate(SQL_INSERT_LINE_ITEM, data);
 	}
+
+    public Optional<List<Order>> getOrderStatus(String name) {
+        final SqlRowSet rs = jdbcTemplate.queryForRowSet(SQL_FIND_BY_NAME, name);
+        final List<Order> order = new LinkedList<>();
+        
+        if (rs.next()) {
+            while (rs.next())
+                order.add(Order.create(rs));
+            return Optional.of(order);
+        }  else {
+            return Optional.empty();
+        }
+    }
 
 
 
