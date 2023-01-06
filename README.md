@@ -7,8 +7,8 @@ If the dispatch is successful, a delivery id will be returned and the customer w
 
 ## Project Set-up - Task 1
 
-- [X] Create a Git repository for this project: https://github.com/chrysaliswoon/VTTP-PAF-Assessment
-- [X] Generate a SpringBoot application and include the following dependencies:
+- [X] Create a Git repository for this project
+- [X] Unzip the file given which has the following dependencies:
   - Spring Boot Dev Tools
   - Spring Web
   - Thymeleaf
@@ -33,26 +33,27 @@ In the database directory, there is a file called ```data.csv``` which contains 
 
 *Note: Sensitive info like database password SHOULD NOT be in the  ```application.properties``` file or in the source code.*
 
-## e-Commerce Form - Task 3 Part 1 (50 marks)
+## e-Commerce Form 
 
-- [] A customer enters his/her name into the name field
-- [] Use the "Add" button to add one or more items into the order
-- [] Items can be deleted from the order with the item's corresponding delete (X) button
-- [] The "Checkout" button will be enabled only if you have entered the following details:
-  - [] Customer's name
-  - [] At least 1 item in your order
-- [] Click the "Checkout" button to submit the order to your e-commerce backend application for processing.
+Check that the following works in the given program:
+- [X] A customer can enter his/her name into the name field
+- [X] Use the "Add" button to add one or more items into the order
+- [X] Items can be deleted from the order with the item's corresponding delete (X) button
+- [X] The "Checkout" button will be enabled only if you have entered the following details:
+  - [X] Customer's name
+  - [X] At least 1 item in your order
+- [X] Click the "Checkout" button to submit the order to your e-commerce backend application for processing.
 
 New orders are processed in 3 steps:
 1. Creating and Saving the order
 2. Dispatching the order to the warehouse
 3. Send the result back to the client
 
-## Creating and Saving the order - Task 3 Part 2 (50 marks)
+## Creating and Saving the order - Task 3 (50 marks)
 
 - [] Write a request handler in the given ```OrderController``` class to process the order
 - [] Check if customer is valid
-  - [] Complete the method ```CustomerRepository.findCustomerByName()```. This method should check if the customer's name exists in the csutomers table **(name coloumn)**
+  - [] Complete the method ```CustomerRepository.findCustomerByName()```. This method should check if the customer's name exists in the customers table **(name coloumn)**
   - [] If the customer DOES NOT EXIST, return a NOT FOUND status code with the following JSON payload as the error message:
     ```json
     {"error": "Customer <customer_name> not found"}
@@ -60,8 +61,114 @@ New orders are processed in 3 steps:
   *Note: DO NOT CHANGE THE SIGNATURE OF THE METHOD ```customerRepository.findCustomerByName()```!*
 
 - [] Populate the model
-  - Use the 
+  - [X] Use the provided models (in ```models``` directory) to hold the order details sent from the frontend e-store. 
+  - [] Generate a unique 8-character long order id for the order [Use the UUID class to generate the order id]
+  - [] Set the order date
 
+- [X] Create an Order table
+  - [X] Create one or more database tables to store the order in the estore database
+  - [X] Write your SQL statements to create the table(s) in the ```schema.sql``` file
+  - [X] Execute the SQL statement to create the tables
+
+- [] Save the order to the database
+  - [] Save the order to the ```estore``` database.
+  - [] When you save, you have to ensure the integrity of the order data.
+  - [] Write this save order in ```OrderRepository``` class
+  - [] If the save fails, return an **Internal Server Error** status with the following JSON payload as the error message:
+  ```json
+  {"error": <the error message>}
+  ```
+
+## Dispatching the order to the warehouse - Task 4 (30 marks)
+
+If task 3 is successful, then the order will need to be dispatched to the warehouse to be packed and shipped to the customer.
+
+- [] Dispatch the order to the following **REST** endpoint with a ```POST``` method
+  ```
+  http://paf.chuklee.com/dispatch/<order id>
+  ```
+  The order id is the order id of the order you are dispatching
+- [] The POST payload is the created order (from Task 3) in JSON format in the following structure:
+  ```json
+  {
+    "orderID": <order id>,
+    "name": <name>,
+    "address": <address>,
+    "email": <email>,
+    "lineItems": [
+      {"item": <item>, "quantity": <quantity>},
+      {"item": <item>, "quantity": <quantity>},
+    ],
+    "createdBy": <your name in NRIC>
+  }
+  ```
+
+- [] Add an additional attribute called ```createdBy``` to the order
+- [] Use the ```WarehouseService.dispatch()``` to write the order dispatch function. 
+
+*DO NOT CHANGE THE METHOD SIGNATURE*
+
+-[] If the dispatch request is successful, the endpoint will return an OK status with the delivery id in the following JSON pauload:
+
+```json
+{
+  "orderId": <order id>,
+  "deliveryId": <delivery id>
+}
+```
+
+*Note: The dispatch can fail if the order details are incorrect / incomplete. The endpoint is also unstable and has a 33% chance of failing.*
+
+- [X] Write SQL statements to create a table called ```order_status``` in the ```schema.sql``` file.
+- [X] The table contains the following mandatory columns:
+  - [X] order_id
+  - [X] delivery_id
+  - [X] status
+  - [X] status_update
+- [X] Create the table in your eshop database
+
+The ```order_status``` is for recording the dispatched status. An order status record is inserted into this table whenever an order is dispatched to the warehouse.
+
+- [] If the dispatch is successful, write the order if, the delivery id and the value **dispatched** in the status column and the timestamp.
+- [] If the dispatch is not successful, write the order id, and the value **pending** in the **status** column and the timestamp
+
+## Send the result back to the client - Task 5 (5 marks)
+
+- [] If the dispatch is successful, send an OK status with the following JSON payload:
+  ```json
+  {
+    "orderId": <order id>,
+    "deliveryId": <delivery id>,
+    "status": "dispatched"
+  }
+  ```
+- [] If the dispatched failed, send an OK status with the following payload:
+  ```json
+  {
+    "orderId": <order id>,
+    "status": "pending"
+  }
+  ```
+
+## API Requests
+The e-store front makes the following HTTP request to get the total number of dispatched and pending orders for a customer.
+
+```
+GET /api/order/<name>/status
+Accept: application/json
+```
+
+- [] Create a RESTController called orderRESTController
+- [] Write a request handler to process the request and return the required data in the following JSON document structure:
+```json
+{
+  "name": <name>,
+  "dispatched": <number of dispatched orders>
+  "pending": <number of pending orders>
+}
+```
+
+- [] Use a **join statement** to get this result from your estore database
 
 ## Submission & Deployment - Task 7 (5 marks)
 
@@ -77,4 +184,5 @@ New orders are processed in 3 steps:
 
 ## Resources & References
 
+- Loading csv data file: https://stackoverflow.com/questions/59993844/error-loading-local-data-is-disabled-this-must-be-enabled-on-both-the-client
 - 

@@ -1,5 +1,9 @@
 package vttp2022.paf.assessment.eshop.models;
 
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+
+import jakarta.json.JsonValue;
+
 // DO NOT CHANGE THIS CLASS
 public class Customer {
 
@@ -15,4 +19,10 @@ public class Customer {
 
 	public String getEmail() { return this.email; }
 	public void setEmail(String email) { this.email = email; }
+    public static Customer create(SqlRowSet rs) {
+        return null;
+    }
+    public JsonValue toJson() {
+        return null;
+    }
 }
