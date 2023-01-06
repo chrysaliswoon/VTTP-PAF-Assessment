@@ -12,5 +12,8 @@ public class Queries {
 
     //? Find orders by name
     final static String SQL_FIND_BY_NAME = "SELECT order_id, customer_name, status FROM eshop.status WHERE customer_name = ?";
+
+    //? Find orders by id
+    final static String SQL_FIND_BY_ID = "SELECT order_id, customer_name, status FROM eshop.status WHERE customer_name = ?";
     
 }
