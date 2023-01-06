@@ -28,13 +28,15 @@ public class CustomerRepository {
 			if (customer.isPresent()) {
 				// value is present inside Optional
 				System.out.println("Customer exists");
+				
 			} else {
 				// value is absent
 				String message = " 404 Error! User does not exist";
 			}
 
 		return customer;
-		
-
+	
 	}
+
+	
 }

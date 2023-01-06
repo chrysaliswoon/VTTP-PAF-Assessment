@@ -60,10 +60,10 @@ New orders are processed in 3 steps:
     ```
   *Note: DO NOT CHANGE THE SIGNATURE OF THE METHOD ```customerRepository.findCustomerByName()```!*
 
-- [] Populate the model
-  - [X] Use the provided models (in ```models``` directory) to hold the order details sent from the frontend e-store. 
-  - [] Generate a unique 8-character long order id for the order [Use the UUID class to generate the order id]
-  - [] Set the order date
+- [X] Populate the model
+Use the provided models (in ```models``` directory) to hold the order details sent from the frontend e-store:
+  - [X] Generate a unique 8-character long order id for the order [Use the UUID class to generate the order id]
+  - [X] Set the order date
 
 - [X] Create an Order table
   - [X] Create one or more database tables to store the order in the estore database
@@ -71,7 +71,7 @@ New orders are processed in 3 steps:
   - [X] Execute the SQL statement to create the tables
 
 - [] Save the order to the database
-  - [] Save the order to the ```estore``` database.
+  - [] Save the order to the ```estore``` database - create SQL Query
   - [] When you save, you have to ensure the integrity of the order data.
   - [] Write this save order in ```OrderRepository``` class
   - [] If the save fails, return an **Internal Server Error** status with the following JSON payload as the error message:
