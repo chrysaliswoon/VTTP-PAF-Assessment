@@ -172,8 +172,8 @@ Accept: application/json
 
 ## Submission & Deployment - Task 7 (5 marks)
 
-- [] Push your code to your repository when you have completed your work
-- [] The site must be deployed on Railway and be accessible from a link: vttp-paf.up.railway.app
+- [X] Push your code to your repository when you have completed your work
+- [X] The site must be deployed on Railway and be accessible from a link: vttp-paf.up.railway.app
   - **Step 1:** ```railway init``` [Initialise a new project. Use railway link if you have already initialised and want to link your springboot application to railway]
   - **Step 2:** ```railway up --detach``` [Deploy the project to railway and detach from the deployment]
   - **Step 3:** ```railway add``` [Add database(s) to your project]
