@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,30 +16,81 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.json.Json;
+import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.servlet.http.HttpSession;
 import vttp2022.paf.assessment.eshop.models.Customer;
 import vttp2022.paf.assessment.eshop.models.LineItem;
+import vttp2022.paf.assessment.eshop.models.Order;
 import vttp2022.paf.assessment.eshop.respositories.CustomerRepository;
+import vttp2022.paf.assessment.eshop.respositories.OrderRepository;
+import vttp2022.paf.assessment.eshop.services.WarehouseService;
 
 @Controller
-@RequestMapping
+@RequestMapping(path = "/api/order", consumes = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController {
 	// TODO: Task 3
 
 	@Autowired
+	private OrderRepository orderRepo;
+
+	@Autowired
 	private CustomerRepository customerRepo;
 
+	@Autowired
+	private WarehouseService warehouseSvc;
 
-	// ? HOMEPAGE
-	@GetMapping("/")
-	public String getHomePage() {
+	@PostMapping
+	public ResponseEntity<String> postOrder(@RequestBody MultiValueMap<String, String> form, Model model) {
 
-		return "index";
+		String name = form.getFirst("name");
+		// String name = form.get(model);
+
+		Optional<Customer> customer = customerRepo.findCustomerByName(name);
+		if (customer.isEmpty()) {
+			String message = "Customer " + name + " not found";
+			return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+		} else {
+			// warehouseSvc.dispatch(name);
+			return null;
+		}
+
 	}
 
-	//? Add items to cart
+	// ? Get status of order by name
+	// GET /api/order/<name>/status
+	// Accept: application/json
+	@GetMapping(path = "/{name}/status")
+	public ResponseEntity<String> getOrderStatus(@PathVariable String name, Model model) {
+		Optional<List<Order>> order = orderRepo.getOrderStatus(name);
 
+		if (order.isEmpty()) {
+			String message = " 404 Error! Order details for this customer does not exist!";
+			return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+		} else {
+			JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+			for (Order o : order.get())
+				arrayBuilder.add(o.toJson());
+			JsonArray result = arrayBuilder.build();
+
+			return ResponseEntity
+					.status(HttpStatus.OK)
+					.contentType(MediaType.APPLICATION_JSON)
+					.body(result.toString());
+		}
+	}
+
+	// //? Add items to cart
+	// @PostMapping("/")
+	// public String postOrder(@RequestBody MultiValueMap<String, String> form) {
+
+	// String name = form.getFirst("name");
+
+	// System.out.print(name);
+	// return "status";
+	// }
+	// }
 }

@@ -1,6 +1,8 @@
 package vttp2022.paf.assessment.eshop.respositories;
 
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +23,31 @@ public class CustomerRepository {
 	// You cannot change the method's signature
 	public Optional<Customer> findCustomerByName(String name) {
 		// TODO: Task 3 
-		final SqlRowSet rs = jdbcTemplate.queryForRowSet(SQL_AUTHENTICATE_CUSTOMER, name);
-		final Optional<Customer> customer = findCustomerByName(name);
+		final SqlRowSet rs = jdbcTemplate.queryForRowSet(SQL_AUTHENTICATE_CUSTOMER_DETAILS, name);
+		Customer customer = new Customer();
 
-		while (rs.next())
-			if (customer.isPresent()) {
-				// value is present inside Optional
-				System.out.println("Customer exists");
+		
+		if (rs.next()) {
+			while (rs.next())
+				return Optional.of(customer);
+				System.out.print( Optional.of(customer));
+		} 
+		return Optional.empty();
+
+
+		// final Optional<Customer> customer = findCustomerByName(name);
+
+		// while (rs.next())
+		// 	if (customer.isPresent()) {
+		// 		// value is present inside Optional
+		// 		System.out.println("Customer exists");
 				
-			} else {
-				// value is absent
-				String message = " 404 Error! User does not exist";
-			}
+		// 	} else {
+		// 		// value is absent
+		// 		String message = " 404 Error! User does not exist";
+		// 	}
 
-		return customer;
+		// return customer;
 	
 	}
 
