@@ -71,9 +71,9 @@ Use the provided models (in ```models``` directory) to hold the order details se
   - [X] Execute the SQL statement to create the tables
 
 - [] Save the order to the database
-  - [] Save the order to the ```estore``` database - create SQL Query
-  - [] When you save, you have to ensure the integrity of the order data.
-  - [] Write this save order in ```OrderRepository``` class
+  - [X] Save the order to the ```estore``` database - create SQL Query
+  - [X] When you save, you have to ensure the integrity of the order data.
+  - [X] Write this save order in ```OrderRepository``` class
   - [] If the save fails, return an **Internal Server Error** status with the following JSON payload as the error message:
   ```json
   {"error": <the error message>}
