@@ -21,6 +21,20 @@ public class OrderRepository {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
+	public Optional<List<Order>> getOrdersById(String id) {
+		final SqlRowSet rs = jdbcTemplate.queryForRowSet(SQL_FIND_BY_ID, id);
+		final List<Order> order = new LinkedList<>();
+
+		if (rs.next()) {
+			while (rs.next())
+			order.add(Order.create(rs));
+			return Optional.of(order);
+		} else {
+			return Optional.empty();
+		}
+
+	}
+
 	public boolean insertPurchaseOrder(Order o) {
 		return jdbcTemplate.update(SQL_INSERT_PURCHASE_ORDER, o.getOrderId(), o.getName(), o.getOrderDate()) > 0;
 	}

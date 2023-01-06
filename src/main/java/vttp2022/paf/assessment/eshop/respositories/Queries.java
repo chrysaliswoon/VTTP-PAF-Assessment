@@ -14,6 +14,6 @@ public class Queries {
     final static String SQL_FIND_BY_NAME = "SELECT order_id, customer_name, status FROM eshop.status WHERE customer_name = ?";
 
     //? Find orders by id
-    final static String SQL_FIND_BY_ID = "SELECT order_id, customer_name, status FROM eshop.status WHERE customer_name = ?";
+    final static String SQL_FIND_BY_ID = "SELECT order_id, customer_name, ship_address, email FROM eshop.orders WHERE order_id = ?";
     
 }
